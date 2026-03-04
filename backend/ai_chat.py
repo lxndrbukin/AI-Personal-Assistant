@@ -12,16 +12,28 @@ API_KEY = getenv("OPENAI_API_KEY")
 
 client = OpenAI(api_key=API_KEY)
 
-def ai_chat(chat_id: int, message: str) -> Generator[str, None, None]:
+def ai_chat(chat_id: int, message: str | list) -> Generator[str, None, None]:
     model = "gpt-4o-mini"
+    if isinstance(message, list):
+        text_content = message[0]["text"]
+        image_data = message[1]["image"] if len(message) > 1 else None
+    else:
+        text_content = message
+        image_data = None
     messages = trim_history(load_history(chat_id))
     message = ChatMessageCreate(
         role=Role.user,
-        content=message,
+        content=text_content,
         extra=None,
         chat_id=chat_id
     )
-    messages.append(message.model_dump(exclude={"chat_id", "extra"}, mode="json"))
+    content = [{"type": "text", "text": text_content}]
+    if image_data:
+        content.append({
+            "type": "image_url",
+            "image_url": {"url": f"data:{image_data['mediaType']};base64,{image_data['data']}"}
+        })
+    messages.append({"role": "user", "content": content})
     save_history(chat_id, message)
     try:
         response = client.chat.completions.create(

@@ -9,7 +9,7 @@ class Role(str, Enum):
     tool = "tool"
 
 class ChatRequest(BaseModel):
-    message: str
+    message: str | list
     model: str = "gpt-4o-mini"
 
 class ChatResponse(BaseModel):
