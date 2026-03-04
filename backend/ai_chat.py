@@ -20,6 +20,7 @@ def ai_chat(chat_id: int, message: str | list) -> Generator[str, None, None]:
     else:
         text_content = message
         image_data = None
+    max_tokens = 2048 if image_data else 1024
     messages = trim_history(load_history(chat_id))
     message = ChatMessageCreate(
         role=Role.user,
@@ -40,7 +41,7 @@ def ai_chat(chat_id: int, message: str | list) -> Generator[str, None, None]:
             model=model,
             messages=messages,
             tools=tools,
-            max_completion_tokens=250,
+            max_completion_tokens=max_tokens,
             stream=False
         )
         choice = response.choices[0]
@@ -77,7 +78,7 @@ def ai_chat(chat_id: int, message: str | list) -> Generator[str, None, None]:
                 model=model,
                 messages=messages,
                 tools=tools,
-                max_completion_tokens=250,
+                max_completion_tokens=max_tokens,
                 stream=True
             )
             output = ""
@@ -91,7 +92,7 @@ def ai_chat(chat_id: int, message: str | list) -> Generator[str, None, None]:
                 model=model,
                 messages=messages,
                 tools=tools,
-                max_completion_tokens=250,
+                max_completion_tokens=max_tokens,
                 stream=True
             )
             output = ""
