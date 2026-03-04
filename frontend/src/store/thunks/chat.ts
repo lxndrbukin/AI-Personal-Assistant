@@ -1,6 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import { appendChunk, finaliseMessage } from "../slices/chatSlice";
+import { type PromptProps } from "../slices/types";
 import { API_URL } from "../../api";
 
 export const createChat = createAsyncThunk("/chats/createChat", async () => {
@@ -34,7 +35,7 @@ export const deleteChat = createAsyncThunk(
 
 export const streamMessage = createAsyncThunk(
   "chat/streamMessage",
-  async (data: { chatId: number; message: string }, { dispatch }) => {
+  async (data: { chatId: number; message: PromptProps }, { dispatch }) => {
     const response = await fetch(`${API_URL}/chats/${data.chatId}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },

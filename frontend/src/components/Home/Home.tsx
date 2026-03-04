@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import {
   type AppDispatch,
+  type PromptProps,
   streamMessage,
   createChat,
   addMessage,
@@ -14,10 +15,10 @@ export default function Home(): JSX.Element {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
 
-  const handleSend = async (message: string) => {
+  const handleSend = async (message: PromptProps) => {
     const chat = await dispatch(createChat()).unwrap();
     dispatch(clearMessages());
-    dispatch(addMessage({ role: "user", content: message }));
+    dispatch(addMessage({ role: "user", content: message.input }));
     dispatch(streamMessage({ chatId: chat.id, message }));
     navigate(`/chat/${chat.id}`);
   };
