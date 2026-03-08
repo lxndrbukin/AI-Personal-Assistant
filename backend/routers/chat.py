@@ -36,12 +36,16 @@ def delete_chat(chat_id: int, db: Session = Depends(get_db)):
 
 @chats_router.post("/{chat_id}")
 def post_message(chat_id: int, request: ChatRequest):
-    def stream_generator(message):
+    def stream_generator():
+        message = request.input if not request.image else [
+            {"text": request.input},
+            {"image": request.image.model_dump()}
+        ]
         for chunk in ai_chat(message=message, chat_id=chat_id):
             yield f"data: {chunk.replace(chr(10), '\\n')}\n\n"
         yield "data: [DONE]\n\n"
 
     return StreamingResponse(
-        stream_generator(request.message),
+        stream_generator(),
         media_type="text/event-stream"
     )

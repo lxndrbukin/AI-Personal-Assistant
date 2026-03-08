@@ -13,7 +13,6 @@ API_KEY = getenv("OPENAI_API_KEY")
 client = OpenAI(api_key=API_KEY)
 
 def ai_chat(chat_id: int, message: str | list) -> Generator[str, None, None]:
-    model = "gpt-4o-mini"
     if isinstance(message, list):
         text_content = message[0]["text"]
         image_data = message[1]["image"] if len(message) > 1 else None
@@ -34,6 +33,7 @@ def ai_chat(chat_id: int, message: str | list) -> Generator[str, None, None]:
             "type": "image_url",
             "image_url": {"url": f"data:{image_data['mediaType']};base64,{image_data['data']}"}
         })
+    model = "gpt-4o" if image_data else "gpt-4o-mini"
     messages.append({"role": "user", "content": content})
     save_history(chat_id, message)
     try:
