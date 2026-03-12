@@ -69,6 +69,19 @@ export default function MessageInput({
     handleSend();
   };
 
+  const renderSelect = (): JSX.Element => {
+    return (
+      <select>
+        <option value="gpt-4o-mini">GPT-4o Mini</option>
+        <option value="gpt-4o">GPT-4o</option>
+        <option value="gpt-4-turbo">GPT-4 Turbo</option>
+        <option value="gpt-4.1-mini">GPT-4.1 Mini</option>
+        <option value="gpt-4.1-nano">GPT-4.1 Nano</option>
+        <option value="gpt-4.1">GPT-4.1</option>
+      </select>
+    );
+  };
+
   return (
     <form className="message-input-form" onSubmit={handleSubmit}>
       {preview && (
@@ -98,6 +111,7 @@ export default function MessageInput({
           onChange={handleFileChange}
           style={{ display: "none" }}
         />
+        {renderSelect()}
         <button
           type="button"
           className={`attach-btn ${image ? "attach-btn--active" : ""}`}

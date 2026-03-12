@@ -491,6 +491,7 @@ body {
   display: flex;
   align-self: center;
   gap: var(--spacing-md);
+  justify-self: center;
 }
 
 .message-input-form .message-input-actions select {
