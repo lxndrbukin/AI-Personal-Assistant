@@ -79,7 +79,7 @@ export default function MessageInput({
 
   const renderSelect = (): JSX.Element => {
     return (
-      <select onChange={handleModelChange}>
+      <select defaultValue={model} onChange={handleModelChange}>
         <option value="gpt-4o-mini">GPT-4o Mini</option>
         <option value="gpt-4o">GPT-4o</option>
         <option value="gpt-4-turbo">GPT-4 Turbo</option>
