@@ -17,5 +17,7 @@ export type AppDispatch = typeof store.dispatch;
 export * from "./slices/types";
 export * from "./slices/chatSlice";
 export * from "./slices/authSlice";
+export * from "./slices/notesSlice";
 export * from "./thunks/chat";
 export * from "./thunks/auth";
+export * from "./thunks/notes";
