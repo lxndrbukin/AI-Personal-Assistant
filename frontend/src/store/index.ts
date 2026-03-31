@@ -1,11 +1,13 @@
 import { configureStore } from "@reduxjs/toolkit";
 import chats from "./slices/chatSlice";
 import auth from "./slices/authSlice";
+import notes from "./slices/notesSlice";
 
 export const store = configureStore({
   reducer: {
     auth,
     chats,
+    notes,
   },
 });
 
