@@ -24,7 +24,7 @@ def create_note(data: NoteCreate, user_id: int, db: Session):
     )
 
 def get_note(note_id: int, user_id: int, db: Session):
-    note = db.query(Note).filter(Note.id == note_id, Note.user_id == user_id).first()
+    note = db.query(Note).filter(Note.id == note_id).first()
     if not note:
         raise HTTPException(status_code=404, detail="Note not found")
     return NoteResponse(
@@ -37,7 +37,7 @@ def get_note(note_id: int, user_id: int, db: Session):
     )
 
 def get_notes(user_id: int, db: Session):
-    notes = db.query(Note).filter(Note.user_id == user_id).all()
+    notes = db.query(Note).all()
     return [
         NoteResponse(
             id=note.id,
