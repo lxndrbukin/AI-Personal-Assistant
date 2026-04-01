@@ -6,14 +6,18 @@ import {
   type RootState,
   type Priority,
   type Status,
+  createNote,
   editNote,
   getNote,
+  clearCurrentNote,
 } from "../../store";
 
-export default function EditNote(): JSX.Element {
+export default function NoteForm(): JSX.Element {
   const dispatch = useDispatch<AppDispatch>();
   const { currentNote } = useSelector((state: RootState) => state.notes);
+
   const [searchParams, setSearchParams] = useSearchParams();
+  const isCreating = searchParams.get("create") === "1";
   const noteId = searchParams.get("edit");
 
   const [title, setTitle] = useState(currentNote.title || "");
@@ -29,7 +33,9 @@ export default function EditNote(): JSX.Element {
   }, []);
 
   useEffect(() => {
-    dispatch(getNote(Number(noteId)));
+    if (!isCreating) {
+      dispatch(getNote(Number(noteId)));
+    }
   }, [dispatch, noteId]);
 
   useEffect(() => {
@@ -49,16 +55,26 @@ export default function EditNote(): JSX.Element {
     const priority = formData.get("priority") as Priority;
     const status = formData.get("status") as Status;
 
-    await dispatch(
-      editNote({ id: currentNote.id!, title, desc, priority, status }),
-    ).unwrap();
+    if (isCreating) {
+      await dispatch(createNote({ title, desc, priority, status })).unwrap();
+    } else {
+      await dispatch(
+        editNote({ id: currentNote.id!, title, desc, priority, status }),
+      ).unwrap();
+    }
+    dispatch(clearCurrentNote());
+    setSearchParams({});
+  };
+
+  const handleClose = () => {
+    dispatch(clearCurrentNote());
     setSearchParams({});
   };
 
   return (
-    <div className="modal-backdrop" onClick={() => setSearchParams({})}>
+    <div className="modal-backdrop" onClick={handleClose}>
       <div className="modal" onClick={(e) => e.stopPropagation()}>
-        <button type="button" onClick={() => setSearchParams({})}>
+        <button type="button" onClick={handleClose}>
           <i className="fa-solid fa-xmark"></i>
         </button>
         <form onSubmit={handleSubmit} className="note-form">

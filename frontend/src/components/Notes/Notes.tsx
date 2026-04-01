@@ -7,7 +7,8 @@ import {
   getNotes,
   deleteNote,
 } from "../../store";
-import EditNote from "./EditNote";
+import { formatDate } from "./utils";
+import NoteForm from "./NoteForm";
 
 export default function Notes(): JSX.Element {
   const dispatch = useDispatch<AppDispatch>();
@@ -32,7 +33,13 @@ export default function Notes(): JSX.Element {
   };
 
   return (
-    <>
+    <div className="notes-page">
+      <div className="notes-page-header">
+        <h2>Notes</h2>
+        <button onClick={() => setSearchParams({ create: "1" })}>
+          <i className="fa-solid fa-plus"></i> New Note
+        </button>
+      </div>
       <div className="notes-table">
         <div className="notes-table-header">
           <span>Title</span>
@@ -46,7 +53,7 @@ export default function Notes(): JSX.Element {
             <span>{note.title}</span>
             <span className={`priority-${note.priority}`}>{note.priority}</span>
             <span>{note.status}</span>
-            <span>{note.created_at}</span>
+            <span>{formatDate(note.created_at!)}</span>
             <div className="notes-table-actions">
               <button onClick={() => handleEdit(note.id!)}>Edit</button>
               <button onClick={() => handleDelete(note.id!)}>Delete</button>
@@ -54,7 +61,7 @@ export default function Notes(): JSX.Element {
           </div>
         ))}
       </div>
-      {noteId && <EditNote />}
-    </>
+      {(noteId || searchParams.get("create")) && <NoteForm />}
+    </div>
   );
 }

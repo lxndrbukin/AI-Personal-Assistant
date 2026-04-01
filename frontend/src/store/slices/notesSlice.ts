@@ -24,7 +24,18 @@ const initialState: Notes = {
 const notesSlice = createSlice({
   name: "notes",
   initialState,
-  reducers: {},
+  reducers: {
+    clearCurrentNote: (state: Notes) => {
+      state.currentNote = {
+        id: null,
+        title: null,
+        desc: null,
+        status: null,
+        priority: null,
+        created_at: null,
+      };
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(getNotes.pending, (state: Notes) => {
       state.isLoading = true;
@@ -102,3 +113,4 @@ const notesSlice = createSlice({
 });
 
 export default notesSlice.reducer;
+export const { clearCurrentNote } = notesSlice.actions;
