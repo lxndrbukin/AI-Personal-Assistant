@@ -29,7 +29,10 @@ def get_current_weather(city=None):
         "current": "temperature_2m,wind_speed_10m,weather_code"
     })
     weather_data = weather_res.json()
+    if weather_data.get("error") or "current" not in weather_data:
+        reason = weather_data.get("reason", "No details available")
+        return f"Weather service unavailable: {reason}"
     temp = weather_data["current"]["temperature_2m"]
     wind = weather_data["current"]["wind_speed_10m"]
     code = weather_data["current"]["weather_code"]
-    return f"Current temperature in {city}:\n- Temperature: {temp}°C\n- Wind Speed: {wind}km/h\n- Weather Conditions: {weather_descriptions.get(code, "Unknown conditions")}"
+    return f"Current temperature in {city}:\n- Temperature: {temp}°C\n- Wind Speed: {wind}km/h\n- Weather Conditions: {weather_descriptions.get(code, 'Unknown conditions')}"
